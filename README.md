@@ -2,6 +2,8 @@
 
 En komplett løsning for å gjennomføre AI-revisjoner basert på Liam Ottleys rammeverk for AI Transformation Partners.
 
+🌐 **Live Demo:** https://amundaiki.github.io/ai-revisjon-platform/
+
 ## 🚀 Funksjoner
 
 ### 📋 Dashboard
@@ -28,7 +30,7 @@ En komplett løsning for å gjennomføre AI-revisjoner basert på Liam Ottleys r
   - 🚀 **Store Satsinger** (Høy impact, høy innsats) 
   - 👍 **Nice-to-Have** (Lav impact, lav innsats)
   - 🚫 **Deprioritér** (Lav impact, høy innsats)
-- Drag-and-drop funksjonalitet
+- Interaktiv matrise
 - Prioriteringsverktøy
 
 ### 💰 ROI Kalkulator
@@ -51,33 +53,22 @@ En komplett løsning for å gjennomføre AI-revisjoner basert på Liam Ottleys r
   6. ROI Analyse - "Money Slide"
 - Eksport til PDF/Print
 
-## 🛠️ Installasjon
+## 🛠️ Bruk
 
-### Forutsetninger
-- Node.js (versjon 16 eller nyere)
-- npm eller yarn
+### 🌐 Online (Anbefalt)
+Åpne appen direkte i nettleseren:
+**https://amundaiki.github.io/ai-revisjon-platform/**
 
-### Trinn-for-trinn installasjon
-
-1. **Klon eller last ned prosjektet**
+### 💻 Lokalt
+1. **Last ned prosjektet**
    ```bash
-   # Hvis du har git
-   git clone <repository-url>
-   cd ai-revisjon
+   git clone https://github.com/amundaiki/ai-revisjon-platform.git
+   cd ai-revisjon-platform
    ```
 
-2. **Installer avhengigheter**
-   ```bash
-   npm install
-   ```
-
-3. **Start utviklingsserveren**
-   ```bash
-   npm start
-   ```
-
-4. **Åpne nettleseren**
-   Appen kjører på `http://localhost:3000`
+2. **Åpne appen**
+   - Dobbeltklikk på `index.html`
+   - Eller åpne filen i nettleseren din
 
 ## 📖 Bruksanvisning
 
@@ -146,12 +137,11 @@ Appen bruker nettleserens lokale lagring (localStorage) for å bevare data mello
 
 ## 🔧 Teknisk arkitektur
 
-- **Frontend**: React 18 med TypeScript
-- **UI-bibliotek**: Material-UI (MUI)
-- **Routing**: React Router
-- **Grafer**: Chart.js med react-chartjs-2
-- **PDF-eksport**: jsPDF og html2canvas
-- **Drag-and-drop**: react-beautiful-dnd
+- **Frontend**: Vanilla HTML, CSS og JavaScript
+- **Design**: Responsivt design med CSS Grid og Flexbox
+- **Kompatibilitet**: Fungerer i alle moderne nettlesere
+- **Lagring**: LocalStorage for datainnsamling
+- **Offline**: Fungerer uten internettforbindelse
 
 ## 📊 Eksempel på bruk
 
