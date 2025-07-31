@@ -1,0 +1,125 @@
+<!-- Opportunity Matrix Section -->
+<section id="matrix" class="content-section">
+    <h2>📊 AI Mulighetsmatrise</h2>
+    <p>Prioriter AI-muligheter basert på forretningsimpact vs implementeringsinnsats</p>
+    
+    <div class="grid grid-2" style="margin-bottom: 2rem;">
+        <div class="card">
+            <h3>🎯 Populære AI-løsninger</h3>
+            <p>Dra og slipp disse inn i matrisen:</p>
+            <div class="popular-solutions">
+                <div class="solution-chip" draggable="true" data-impact="8" data-effort="3" data-cost="150000" data-savings="300000">
+                    📧 E-post Klassifisering
+                </div>
+                <div class="solution-chip" draggable="true" data-impact="7" data-effort="4" data-cost="200000" data-savings="450000">
+                    🤖 Kundeservice Chatbot
+                </div>
+                <div class="solution-chip" draggable="true" data-impact="9" data-effort="6" data-cost="400000" data-savings="800000">
+                    📊 Prediktiv Analyse
+                </div>
+                <div class="solution-chip" draggable="true" data-impact="6" data-effort="2" data-cost="75000" data-savings="200000">
+                    📄 Dokument Automatisering
+                </div>
+                <div class="solution-chip" draggable="true" data-impact="8" data-effort="5" data-cost="300000" data-savings="600000">
+                    🔍 Intelligente Søk
+                </div>
+                <div class="solution-chip" draggable="true" data-impact="7" data-effort="3" data-cost="120000" data-savings="350000">
+                    📅 Møteplanlegging AI
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3>➕ Lag egendefinert løsning</h3>
+            <div style="margin-bottom: 1rem;">
+                <label>Løsningsnavn:</label>
+                <input type="text" id="custom-solution-name" class="form-input" placeholder="Min AI-løsning">
+            </div>
+            <div class="grid grid-2">
+                <div>
+                    <label>Forretningsimpact (1-10):</label>
+                    <input type="range" id="custom-impact" min="1" max="10" value="5" class="form-range">
+                    <span id="impact-value">5</span>
+                </div>
+                <div>
+                    <label>Implementeringsinnsats (1-10):</label>
+                    <input type="range" id="custom-effort" min="1" max="10" value="5" class="form-range">
+                    <span id="effort-value">5</span>
+                </div>
+            </div>
+            <div class="grid grid-2">
+                <div>
+                    <label>Estimert kostnad (NOK):</label>
+                    <input type="number" id="custom-cost" class="form-input" placeholder="200000" min="0">
+                </div>
+                <div>
+                    <label>Årlig besparelse (NOK):</label>
+                    <input type="number" id="custom-savings" class="form-input" placeholder="400000" min="0">
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="addCustomOpportunity()">➕ Legg til i matrise</button>
+        </div>
+    </div>
+    
+    <div class="matrix-container">
+        <!-- Axis labels -->
+        <div class="matrix-label" style="top: -30px; left: 50%; transform: translateX(-50%);">HØY IMPACT</div>
+        <div class="matrix-label" style="bottom: -30px; left: 50%; transform: translateX(-50%);">LAV IMPACT</div>
+        <div class="matrix-label" style="left: -80px; top: 50%; transform: translateY(-50%) rotate(-90deg);">LAV INNSATS</div>
+        <div class="matrix-label" style="right: -80px; top: 50%; transform: translateY(-50%) rotate(90deg);">HØY INNSATS</div>
+        
+        <!-- Quadrant labels -->
+        <div class="matrix-quadrant" style="top: 10px; left: 10px; background: rgba(76, 175, 80, 0.9);">
+            🌟 HURTIGE GEVINSTER
+        </div>
+        <div class="matrix-quadrant" style="top: 10px; right: 10px; background: rgba(33, 150, 243, 0.9);">
+            🚀 STORE SATSINGER
+        </div>
+        <div class="matrix-quadrant" style="bottom: 10px; left: 10px; background: rgba(255, 152, 0, 0.9);">
+            👍 NICE-TO-HAVE
+        </div>
+        <div class="matrix-quadrant" style="bottom: 10px; right: 10px; background: rgba(244, 67, 54, 0.9);">
+            🚫 DEPRIORITÉR
+        </div>
+        
+        <!-- Center lines -->
+        <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #666; opacity: 0.3;"></div>
+        <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: #666; opacity: 0.3;"></div>
+        
+        <!-- Opportunity chips - will be populated from data -->
+        <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: #666; font-style: italic; text-align: center;">
+            <p>Ingen AI-muligheter kartlagt ennå</p>
+            <small>Legg til muligheter basert på prosess-analyse</small>
+        </div>
+    </div>
+    
+    <div class="grid grid-4">
+        <div class="card" style="text-align: center; border-left: 4px solid #4caf50;">
+            <h3 style="color: #4caf50;">🌟 Hurtige Gevinster</h3>
+            <div style="font-size: 2.5rem; color: #4caf50; font-weight: bold;">0</div>
+            <p>Høy impact, lav innsats<br><strong>Start her!</strong></p>
+        </div>
+        <div class="card" style="text-align: center; border-left: 4px solid #2196f3;">
+            <h3 style="color: #2196f3;">🚀 Store Satsinger</h3>
+            <div style="font-size: 2.5rem; color: #2196f3; font-weight: bold;">0</div>
+            <p>Transformative prosjekter<br><strong>Langsiktig</strong></p>
+        </div>
+        <div class="card" style="text-align: center; border-left: 4px solid #ff9800;">
+            <h3 style="color: #ff9800;">👍 Nice-to-Have</h3>
+            <div style="font-size: 2.5rem; color: #ff9800; font-weight: bold;">0</div>
+            <p>Enkle forbedringer<br><strong>Når tid tillater</strong></p>
+        </div>
+        <div class="card" style="text-align: center; border-left: 4px solid #f44336;">
+            <h3 style="color: #f44336;">🚫 Deprioritér</h3>
+            <div style="font-size: 2.5rem; color: #f44336; font-weight: bold;">0</div>
+            <p>Tids- og pengegruver<br><strong>Unngå!</strong></p>
+        </div>
+    </div>
+    
+    <div class="alert alert-info">
+        <h4>📋 Anbefalte prioriteringer:</h4>
+        <p><strong>Fase 1 (0-3 mnd):</strong> Implementer hurtige gevinster for å bygge momentum og tillit</p>
+        <p><strong>Fase 2 (3-12 mnd):</strong> Tackle store satsinger basert på suksess fra fase 1</p>
+        <p><strong>Fase 3 (12+ mnd):</strong> Vurder nice-to-have prosjekter når kapasitet tillater</p>
+    </div>
+</section>

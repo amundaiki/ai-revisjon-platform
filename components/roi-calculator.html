@@ -1,0 +1,120 @@
+<!-- ROI Calculator Section -->
+<section id="roi" class="content-section">
+    <h2>💰 ROI Kalkulator - "Money Slide"</h2>
+    <p>Beregn finansiell avkastning på AI-investeringer med automatiske kalkulasjoner</p>
+    
+    <div class="grid grid-4">
+        <div class="stat-card" style="background: linear-gradient(135deg, #1976d2, #1565c0);">
+            <div>Total Investering</div>
+            <div class="stat-value" id="total-investment">0</div>
+            <small>NOK</small>
+        </div>
+        <div class="stat-card" style="background: linear-gradient(135deg, #4caf50, #388e3c);">
+            <div>Årlig Besparelse</div>
+            <div class="stat-value" id="annual-savings">0</div>
+            <small>NOK</small>
+        </div>
+        <div class="stat-card" style="background: linear-gradient(135deg, #ff9800, #f57c00);">
+            <div>ROI</div>
+            <div class="stat-value" id="roi-percentage">0%</div>
+            <small>Avkastning</small>
+        </div>
+        <div class="stat-card" style="background: linear-gradient(135deg, #e91e63, #c2185b);">
+            <div>Payback</div>
+            <div class="stat-value" id="payback-period">0</div>
+            <small>måneder</small>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h3>📊 Legg til ROI Beregning</h3>
+        <div class="grid grid-2">
+            <div>
+                <h4>💼 Investering</h4>
+                <div style="margin-bottom: 1rem;">
+                    <label>Utviklingskostnad (NOK):</label>
+                    <input type="number" id="development-cost" class="form-input" placeholder="150000" min="0">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label>Implementeringskostnad (NOK):</label>
+                    <input type="number" id="implementation-cost" class="form-input" placeholder="50000" min="0">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label>Årlig driftskostnad (NOK):</label>
+                    <input type="number" id="annual-operation-cost" class="form-input" placeholder="25000" min="0">
+                </div>
+            </div>
+            <div>
+                <h4>💰 Besparelser</h4>
+                <div style="margin-bottom: 1rem;">
+                    <label>Timer spart per uke:</label>
+                    <input type="number" id="hours-saved" class="form-input" placeholder="10" min="0" step="0.5">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label>Gjennomsnittlig timelønn (NOK):</label>
+                    <input type="number" id="hourly-rate" class="form-input" placeholder="600" min="0">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label>Ekstra årlig inntekt (NOK):</label>
+                    <input type="number" id="additional-revenue" class="form-input" placeholder="0" min="0">
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-primary" onclick="calculateROI()">🧮 Beregn ROI</button>
+        <button class="btn btn-success" onclick="addToOpportunityMatrix()">➕ Legg til i Mulighetsmatrise</button>
+    </div>
+    
+    <div class="card" id="roi-results" style="display: none;">
+        <h3>📊 Detaljert ROI Analyse</h3>
+        <div class="grid grid-2">
+            <div>
+                <h4>💸 Kostnader (3 år)</h4>
+                <ul id="cost-breakdown">
+                    <!-- Populated by JavaScript -->
+                </ul>
+            </div>
+            <div>
+                <h4>💰 Besparelser (3 år)</h4>
+                <ul id="savings-breakdown">
+                    <!-- Populated by JavaScript -->
+                </ul>
+            </div>
+        </div>
+        <div class="alert alert-success">
+            <h4>🎯 Anbefaling:</h4>
+            <p id="roi-recommendation">
+                <!-- Populated by JavaScript -->
+            </p>
+        </div>
+    </div>
+    
+    <div class="grid grid-2">
+        <div class="card">
+            <h4>📈 Direkte Kostnadsbesparelser</h4>
+            <p style="color: #666; font-style: italic;">Beregnes automatisk basert på:</p>
+            <ul>
+                <li>Timer spart per uke × gjennomsnittlig timelønn</li>
+                <li>Redusert manuelt arbeid</li>
+                <li>Mindre overtime</li>
+                <li>Effektivisert arbeidsflyt</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>💼 Potensiell Inntektsøkning</h4>
+            <p style="color: #666; font-style: italic;">Basert på omallokering av tid til:</p>
+            <ul>
+                <li>Mer tid til salgsaktiviteter</li>
+                <li>Forbedret kundeservice</li>
+                <li>Strategisk arbeid</li>
+                <li>Innovasjon og utvikling</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="alert alert-info">
+        <h4>🎯 ROI Kalkulator:</h4>
+        <p>Når du har lagt til AI-muligheter, beregnes automatisk total investering, årlig verdi, ROI og payback-periode.</p>
+        <p>Dette gir deg en komplett "Money Slide" for klientpresentasjonen.</p>
+    </div>
+</section>

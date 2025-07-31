@@ -4,334 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Revisjon Platform</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #1976d2, #1565c0);
-            color: white;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .header h1 {
-            margin: 0;
-            font-size: 2rem;
-        }
-        
-        .nav {
-            background: #f5f5f5;
-            padding: 0.5rem 2rem;
-            border-bottom: 1px solid #ddd;
-            overflow-x: auto;
-            white-space: nowrap;
-        }
-        
-        .nav-button {
-            display: inline-block;
-            margin: 0 0.5rem 0.5rem 0;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            background: white;
-            color: #333;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .nav-button:hover {
-            background: #e3f2fd;
-            transform: translateY(-1px);
-        }
-        
-        .nav-button.active {
-            background: #1976d2;
-            color: white;
-        }
-        
-        .main {
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .content-section {
-            display: none;
-        }
-        
-        .content-section.active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .card {
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: transform 0.2s ease;
-        }
-        
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        
-        .grid {
-            display: grid;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
-        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
-        .grid-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
-        
-        .btn {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            margin-right: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .btn-primary {
-            background: #1976d2;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #1565c0;
-            transform: translateY(-1px);
-        }
-        
-        .btn-success {
-            background: #4caf50;
-            color: white;
-        }
-        
-        .btn-success:hover {
-            background: #388e3c;
-        }
-        
-        .btn-warning {
-            background: #ff9800;
-            color: white;
-        }
-        
-        .btn-warning:hover {
-            background: #f57c00;
-        }
-        
-        .progress-bar {
-            background: #e0e0e0;
-            height: 12px;
-            border-radius: 6px;
-            overflow: hidden;
-            margin: 0.5rem 0;
-        }
-        
-        .progress-fill {
-            background: linear-gradient(90deg, #4caf50, #8bc34a);
-            height: 100%;
-            border-radius: 6px;
-            transition: width 0.3s ease;
-        }
-        
-        .matrix-container {
-            position: relative;
-            width: 100%;
-            max-width: 600px;
-            height: 400px;
-            margin: 2rem auto;
-            background: linear-gradient(135deg, #ffebee 0%, #e8f5e8 100%);
-            border: 2px solid #ddd;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-        
-        .matrix-label {
-            position: absolute;
-            font-weight: bold;
-            font-size: 0.9rem;
-            color: #555;
-        }
-        
-        .matrix-quadrant {
-            position: absolute;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: white;
-        }
-        
-        .opportunity-chip {
-            position: absolute;
-            padding: 6px 12px;
-            border-radius: 16px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: white;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-        
-        .opportunity-chip:hover {
-            transform: scale(1.05);
-        }
-        
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .table th,
-        .table td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        .table th {
-            background: #f8f9fa;
-            font-weight: 600;
-            color: #333;
-        }
-        
-        .table tr:hover {
-            background: #f8f9fa;
-        }
-        
-        .stat-card {
-            text-align: center;
-            padding: 1.5rem;
-            border-radius: 12px;
-            color: white;
-            background: linear-gradient(135deg, #2196f3, #1976d2);
-        }
-        
-        .stat-value {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin: 0.5rem 0;
-        }
-        
-        .process-step {
-            background: #f8f9fa;
-            padding: 1rem;
-            margin: 0.5rem 0;
-            border-radius: 8px;
-            border-left: 4px solid #e0e0e0;
-        }
-        
-        .process-step.warning {
-            background: #fff3cd;
-            border-left-color: #ffc107;
-        }
-        
-        .process-step.error {
-            background: #ffebee;
-            border-left-color: #f44336;
-        }
-        
-        .alert {
-            padding: 1rem;
-            border-radius: 8px;
-            margin: 1rem 0;
-        }
-        
-        .alert-info {
-            background: #e3f2fd;
-            border-left: 4px solid #2196f3;
-            color: #1565c0;
-        }
-        
-        .alert-success {
-            background: #e8f5e8;
-            border-left: 4px solid #4caf50;
-            color: #2e7d32;
-        }
-        
-        .badge {
-            padding: 4px 12px;
-            border-radius: 16px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: white;
-        }
-        
-        .badge-success { background: #4caf50; }
-        .badge-warning { background: #ff9800; }
-        .badge-error { background: #f44336; }
-        .badge-info { background: #2196f3; }
-        
-        @media (max-width: 768px) {
-            .main {
-                padding: 1rem;
-            }
-            
-            .grid-2, .grid-3, .grid-4 {
-                grid-template-columns: 1fr;
-            }
-            
-            .nav {
-                padding: 0.5rem 1rem;
-            }
-            
-            .header {
-                padding: 1rem;
-            }
-            
-            .header h1 {
-                font-size: 1.5rem;
-            }
-        }
-    </style>
+    
+    <!-- External Stylesheets -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/components.css">
 </head>
 <body>
     <header class="header">
-        <h1>🤖 AI Revisjon Platform</h1>
-        <p>Komplett løsning for AI-transformasjon basert på Liam Ottleys rammeverk</p>
+        <h1>🦖 AI Revisjon Platform</h1>
+        <p>Moderne og profesjonell AI-transformasjon basert på Liam Ottleys rammeverk</p>
     </header>
     
     <nav class="nav">
-        <button class="nav-button active" onclick="showSection('dashboard')">📋 Dashboard</button>
-        <button class="nav-button" onclick="showSection('interviews')">🎤 Intervjuer</button>
-        <button class="nav-button" onclick="showSection('process')">🗺️ Prosess Mapping</button>
-        <button class="nav-button" onclick="showSection('matrix')">📊 Mulighetsmatrise</button>
-        <button class="nav-button" onclick="showSection('roi')">💰 ROI Kalkulator</button>
-        <button class="nav-button" onclick="showSection('presentation')">📑 Presentasjon</button>
+        <button class="nav-button active" onclick="showSection('dashboard')">
+            <span>📋 Dashboard</span>
+        </button>
+        <button class="nav-button" onclick="showSection('interviews')">
+            <span>🎤 Intervjuer</span>
+        </button>
+        <button class="nav-button" onclick="showSection('process')">
+            <span>🗺️ Prosess Mapping</span>
+        </button>
+        <button class="nav-button" onclick="showSection('matrix')">
+            <span>📊 Mulighetsmatrise</span>
+        </button>
+        <button class="nav-button" onclick="showSection('roi')">
+            <span>💰 ROI Kalkulator</span>
+        </button>
+        <button class="nav-button" onclick="showSection('presentation')">
+            <span>📑 Presentasjon</span>
+        </button>
     </nav>
     
     <main class="main">
@@ -341,28 +43,36 @@
             
             <div class="grid grid-2">
                 <div class="card">
-                    <h3>🎯 Prosjektoversikt</h3>
-                    <p>Opprett og administrer AI revisjon prosjekter basert på Liam Ottleys metodikk</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 0%"></div>
+                    <h3>🏢 Aktive AI Revisjoner</h3>
+                    <div id="project-list">
+                        <div class="project-item active" onclick="selectProject('demo')" data-project="demo">
+                            <div class="project-header">
+                                <strong>🚀 Demo Bedrift AS</strong>
+                                <span class="badge badge-info">Pågående</span>
                     </div>
-                    <small>Prosjektfremgang: 0%</small>
-                    <br><br>
-                    <button class="btn btn-success">Nytt Prosjekt</button>
+                            <small>Startet: 15. januar 2024</small>
+                        </div>
+                    </div>
+                    <button class="btn btn-success" onclick="openNewProjectPopup()">➕ Nytt Prosjekt</button>
                 </div>
                 
                 <div class="card">
-                    <h3>📊 Gjennomføringsstatistikk</h3>
-                    <div class="grid grid-2" style="gap: 1rem; margin-top: 1rem;">
+                    <h3>📊 Prosjektstatistikk</h3>
+                    <div id="current-project-name" style="font-weight: bold; margin-bottom: 1rem;">Demo Bedrift AS</div>
+                    <div class="grid grid-2" style="gap: 1rem;">
                         <div style="text-align: center;">
-                            <div style="font-size: 2rem; color: #1976d2; font-weight: bold;">0</div>
+                            <div id="interviews-count" style="font-size: 2rem; color: #1976d2; font-weight: bold;">0</div>
                             <small>Intervjuer fullført</small>
                         </div>
                         <div style="text-align: center;">
-                            <div style="font-size: 2rem; color: #4caf50; font-weight: bold;">0</div>
+                            <div id="opportunities-count" style="font-size: 2rem; color: #4caf50; font-weight: bold;">0</div>
                             <small>AI-muligheter identifisert</small>
                         </div>
                     </div>
+                    <div class="progress-bar" style="margin-top: 1rem;">
+                        <div id="project-progress" class="progress-fill" style="width: 15%"></div>
+                    </div>
+                    <small id="progress-text">Prosjektfremgang: 15%</small>
                 </div>
             </div>
             
@@ -378,25 +88,25 @@
             </div>
             
             <div class="card">
-                <h3>📈 Estimert verdi</h3>
+                <h3>📈 Estimert verdi - <span id="project-name-roi">Demo Bedrift AS</span></h3>
                 <div class="grid grid-4">
                     <div class="stat-card" style="background: linear-gradient(135deg, #4caf50, #388e3c);">
                         <div>Total ROI</div>
-                        <div class="stat-value">-</div>
+                        <div class="stat-value" id="dashboard-roi">-</div>
                     </div>
                     <div class="stat-card" style="background: linear-gradient(135deg, #ff9800, #f57c00);">
                         <div>Payback</div>
-                        <div class="stat-value">-</div>
+                        <div class="stat-value" id="dashboard-payback">-</div>
                         <small>måneder</small>
                     </div>
                     <div class="stat-card" style="background: linear-gradient(135deg, #2196f3, #1565c0);">
                         <div>Årlig besparelse</div>
-                        <div class="stat-value">-</div>
+                        <div class="stat-value" id="dashboard-savings">-</div>
                         <small>NOK</small>
                     </div>
                     <div class="stat-card" style="background: linear-gradient(135deg, #9c27b0, #7b1fa2);">
                         <div>Investering</div>
-                        <div class="stat-value">-</div>
+                        <div class="stat-value" id="dashboard-investment">-</div>
                         <small>NOK</small>
                     </div>
                 </div>
@@ -422,11 +132,7 @@
                         <li>Hvis du hadde en tryllestav, hvilket problem ville du løst over natten?</li>
                     </ul>
                     
-                    <div class="alert alert-info">
-                        <strong>Tips:</strong> Fokuser på strategiske utfordringer og mål på høyt nivå
-                    </div>
-                    
-                    <button class="btn btn-primary">Nytt Stakeholder Intervju</button>
+                    <button class="btn btn-primary" onclick="openInterviewPopup('stakeholder')">Nytt Stakeholder Intervju</button>
                 </div>
                 
                 <div class="card">
@@ -442,19 +148,17 @@
                         <li>Er det dobbel-innlegging av data mellom forskjellige systemer?</li>
                     </ul>
                     
-                    <div class="alert alert-info">
-                        <strong>Tips:</strong> Søk etter konkrete, daglige smertepunkter og ineffektiviteter
-                    </div>
-                    
-                    <button class="btn btn-primary">Nytt Sluttbruker Intervju</button>
+                    <button class="btn btn-primary" onclick="openInterviewPopup('enduser')">Nytt Sluttbruker Intervju</button>
                 </div>
             </div>
             
             <div class="card">
-                <h3>📋 Intervju Status</h3>
-                <div style="text-align: center; padding: 3rem;">
-                    <p style="color: #666; font-style: italic;">Ingen intervjuer registrert ennå</p>
+                <h3>📋 Gjennomførte Intervjuer</h3>
+                <div id="completed-interviews">
+                    <div style="text-align: center; padding: 2rem; color: #666; font-style: italic;">
+                        <p>Ingen intervjuer registrert ennå</p>
                     <p>Start med å gjennomføre stakeholder og sluttbruker intervjuer</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -468,45 +172,35 @@
                 <div class="card">
                     <h3>🎯 Akkvisisjonsmotor</h3>
                     <p><em>Hvordan finner og signerer dere nye kunder?</em></p>
-                    
-                    <div style="margin-top: 1rem; text-align: center; padding: 2rem; color: #666; font-style: italic;">
-                        <p>Ingen prosesstrinn kartlagt ennå</p>
-                        <p>Legg til prosesser fra intervjufunn</p>
+                    <div id="acquisition-processes" style="margin: 1rem 0;">
+                        <div style="text-align: center; padding: 1rem; color: #666; font-style: italic;">
+                            Ingen prosesser kartlagt ennå
                     </div>
-                    
-                    <button class="btn btn-success">+ Legg til prosess</button>
+                    </div>
+                    <button class="btn btn-success" onclick="addProcess('acquisition')">+ Legg til prosess</button>
                 </div>
                 
                 <div class="card">
                     <h3>🔧 Leveransemotor</h3>
                     <p><em>Hvordan leverer dere produktet eller tjenesten?</em></p>
-                    
-                    <div style="margin-top: 1rem; text-align: center; padding: 2rem; color: #666; font-style: italic;">
-                        <p>Ingen prosesstrinn kartlagt ennå</p>
-                        <p>Legg til prosesser fra intervjufunn</p>
+                    <div id="delivery-processes" style="margin: 1rem 0;">
+                        <div style="text-align: center; padding: 1rem; color: #666; font-style: italic;">
+                            Ingen prosesser kartlagt ennå
                     </div>
-                    
-                    <button class="btn btn-warning">+ Legg til prosess</button>
+                    </div>
+                    <button class="btn btn-warning" onclick="addProcess('delivery')">+ Legg til prosess</button>
                 </div>
                 
                 <div class="card">
                     <h3>🛟 Støttemotor</h3>
                     <p><em>Hvordan håndterer dere kundesupport og oppfølging?</em></p>
-                    
-                    <div style="margin-top: 1rem; text-align: center; padding: 2rem; color: #666; font-style: italic;">
-                        <p>Ingen prosesstrinn kartlagt ennå</p>
-                        <p>Legg til prosesser fra intervjufunn</p>
+                    <div id="support-processes" style="margin: 1rem 0;">
+                        <div style="text-align: center; padding: 1rem; color: #666; font-style: italic;">
+                            Ingen prosesser kartlagt ennå
                     </div>
-                    
-                    <button class="btn btn-primary">+ Legg til prosess</button>
                 </div>
+                    <button class="btn btn-primary" onclick="addProcess('support')">+ Legg til prosess</button>
             </div>
-            
-            <div class="alert alert-success">
-                <h4>💡 Identifiser problemområder:</h4>
-                <p><strong>Tidssink (Gul):</strong> Manuelle, repetitive og tidkrevende prosesser som reduserer produktivitet</p>
-                <p><strong>Kvalitetsrisiko (Rød):</strong> Prosesser utsatt for menneskelige feil som kan påvirke leveransekvalitet</p>
-                <p>Disse områdene er kandidater for AI-automatisering og optimalisering.</p>
             </div>
         </section>
         
@@ -514,6 +208,64 @@
         <section id="matrix" class="content-section">
             <h2>📊 AI Mulighetsmatrise</h2>
             <p>Prioriter AI-muligheter basert på forretningsimpact vs implementeringsinnsats</p>
+            
+            <div class="grid grid-2" style="margin-bottom: 2rem;">
+                <div class="card">
+                    <h3>🎯 Populære AI-løsninger</h3>
+                    <p>Dra og slipp disse inn i matrisen:</p>
+                    <div class="popular-solutions">
+                        <div class="solution-chip" draggable="true" data-impact="8" data-effort="3" data-cost="150000" data-savings="300000">
+                            📧 E-post Klassifisering
+                        </div>
+                        <div class="solution-chip" draggable="true" data-impact="7" data-effort="4" data-cost="200000" data-savings="450000">
+                            🤖 Kundeservice Chatbot
+                        </div>
+                        <div class="solution-chip" draggable="true" data-impact="9" data-effort="6" data-cost="400000" data-savings="800000">
+                            📊 Prediktiv Analyse
+                        </div>
+                        <div class="solution-chip" draggable="true" data-impact="6" data-effort="2" data-cost="75000" data-savings="200000">
+                            📄 Dokument Automatisering
+                        </div>
+                        <div class="solution-chip" draggable="true" data-impact="8" data-effort="5" data-cost="300000" data-savings="600000">
+                            🔍 Intelligente Søk
+                        </div>
+                        <div class="solution-chip" draggable="true" data-impact="7" data-effort="3" data-cost="120000" data-savings="350000">
+                            📅 Møteplanlegging AI
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>➕ Lag egendefinert løsning</h3>
+                    <div style="margin-bottom: 1rem;">
+                        <label>Løsningsnavn:</label>
+                        <input type="text" id="custom-solution-name" class="form-input" placeholder="Min AI-løsning">
+                    </div>
+                    <div class="grid grid-2">
+                        <div>
+                            <label>Forretningsimpact (1-10):</label>
+                            <input type="range" id="custom-impact" min="1" max="10" value="5" class="form-range">
+                            <span id="impact-value">5</span>
+                        </div>
+                        <div>
+                            <label>Implementeringsinnsats (1-10):</label>
+                            <input type="range" id="custom-effort" min="1" max="10" value="5" class="form-range">
+                            <span id="effort-value">5</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-2">
+                        <div>
+                            <label>Estimert kostnad (NOK):</label>
+                            <input type="number" id="custom-cost" class="form-input" placeholder="200000" min="0">
+                        </div>
+                        <div>
+                            <label>Årlig besparelse (NOK):</label>
+                            <input type="number" id="custom-savings" class="form-input" placeholder="400000" min="0">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="addCustomOpportunity()">➕ Legg til i matrise</button>
+                </div>
+            </div>
             
             <div class="matrix-container">
                 <!-- Axis labels -->
@@ -539,42 +291,6 @@
                 <!-- Center lines -->
                 <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #666; opacity: 0.3;"></div>
                 <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: #666; opacity: 0.3;"></div>
-                
-                <!-- Opportunity chips - will be populated from data -->
-                <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: #666; font-style: italic; text-align: center;">
-                    <p>Ingen AI-muligheter kartlagt ennå</p>
-                    <small>Legg til muligheter basert på prosess-analyse</small>
-                </div>
-            </div>
-            
-            <div class="grid grid-4">
-                <div class="card" style="text-align: center; border-left: 4px solid #4caf50;">
-                    <h3 style="color: #4caf50;">🌟 Hurtige Gevinster</h3>
-                    <div style="font-size: 2.5rem; color: #4caf50; font-weight: bold;">0</div>
-                    <p>Høy impact, lav innsats<br><strong>Start her!</strong></p>
-                </div>
-                <div class="card" style="text-align: center; border-left: 4px solid #2196f3;">
-                    <h3 style="color: #2196f3;">🚀 Store Satsinger</h3>
-                    <div style="font-size: 2.5rem; color: #2196f3; font-weight: bold;">0</div>
-                    <p>Transformative prosjekter<br><strong>Langsiktig</strong></p>
-                </div>
-                <div class="card" style="text-align: center; border-left: 4px solid #ff9800;">
-                    <h3 style="color: #ff9800;">👍 Nice-to-Have</h3>
-                    <div style="font-size: 2.5rem; color: #ff9800; font-weight: bold;">0</div>
-                    <p>Enkle forbedringer<br><strong>Når tid tillater</strong></p>
-                </div>
-                <div class="card" style="text-align: center; border-left: 4px solid #f44336;">
-                    <h3 style="color: #f44336;">🚫 Deprioritér</h3>
-                    <div style="font-size: 2.5rem; color: #f44336; font-weight: bold;">0</div>
-                    <p>Tids- og pengegruver<br><strong>Unngå!</strong></p>
-                </div>
-            </div>
-            
-            <div class="alert alert-info">
-                <h4>📋 Anbefalte prioriteringer:</h4>
-                <p><strong>Fase 1 (0-3 mnd):</strong> Implementer hurtige gevinster for å bygge momentum og tillit</p>
-                <p><strong>Fase 2 (3-12 mnd):</strong> Tackle store satsinger basert på suksess fra fase 1</p>
-                <p><strong>Fase 3 (12+ mnd):</strong> Vurder nice-to-have prosjekter når kapasitet tillater</p>
             </div>
         </section>
         
@@ -586,62 +302,86 @@
             <div class="grid grid-4">
                 <div class="stat-card" style="background: linear-gradient(135deg, #1976d2, #1565c0);">
                     <div>Total Investering</div>
-                    <div class="stat-value">-</div>
+                    <div class="stat-value" id="total-investment">0</div>
                     <small>NOK</small>
                 </div>
                 <div class="stat-card" style="background: linear-gradient(135deg, #4caf50, #388e3c);">
                     <div>Årlig Besparelse</div>
-                    <div class="stat-value">-</div>
+                    <div class="stat-value" id="annual-savings">0</div>
                     <small>NOK</small>
                 </div>
                 <div class="stat-card" style="background: linear-gradient(135deg, #ff9800, #f57c00);">
                     <div>ROI</div>
-                    <div class="stat-value">-</div>
+                    <div class="stat-value" id="roi-percentage">0%</div>
                     <small>Avkastning</small>
                 </div>
                 <div class="stat-card" style="background: linear-gradient(135deg, #e91e63, #c2185b);">
                     <div>Payback</div>
-                    <div class="stat-value">-</div>
+                    <div class="stat-value" id="payback-period">0</div>
                     <small>måneder</small>
                 </div>
             </div>
             
             <div class="card">
+                <h3>📊 Legg til ROI Beregning</h3>
+                <div class="grid grid-2">
+                    <div>
+                        <h4>💼 Investering</h4>
+                        <div style="margin-bottom: 1rem;">
+                            <label>Utviklingskostnad (NOK):</label>
+                            <input type="number" id="development-cost" class="form-input" placeholder="150000" min="0">
+                </div>
+                        <div style="margin-bottom: 1rem;">
+                            <label>Implementeringskostnad (NOK):</label>
+                            <input type="number" id="implementation-cost" class="form-input" placeholder="50000" min="0">
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <label>Årlig driftskostnad (NOK):</label>
+                            <input type="number" id="annual-operation-cost" class="form-input" placeholder="25000" min="0">
+                        </div>
+                    </div>
+                    <div>
+                        <h4>💰 Besparelser</h4>
+                        <div style="margin-bottom: 1rem;">
+                            <label>Timer spart per uke:</label>
+                            <input type="number" id="hours-saved" class="form-input" placeholder="10" min="0" step="0.5">
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <label>Gjennomsnittlig timelønn (NOK):</label>
+                            <input type="number" id="hourly-rate" class="form-input" placeholder="600" min="0">
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <label>Ekstra årlig inntekt (NOK):</label>
+                            <input type="number" id="additional-revenue" class="form-input" placeholder="0" min="0">
+                        </div>
+                </div>
+                </div>
+                <button class="btn btn-primary" onclick="calculateROI()">🧮 Beregn ROI</button>
+                <button class="btn btn-success" onclick="addToOpportunityMatrix()">➕ Legg til i Mulighetsmatrise</button>
+            </div>
+            
+            <div class="card" id="roi-results" style="display: none;">
                 <h3>📊 Detaljert ROI Analyse</h3>
-                <div style="text-align: center; padding: 3rem; color: #666; font-style: italic;">
-                    <p>Ingen ROI-beregninger ennå</p>
-                    <p>Legg til AI-muligheter i Mulighetsmatrise først</p>
-                </div>
-            </div>
-            
             <div class="grid grid-2">
-                <div class="card">
-                    <h4>📈 Direkte Kostnadsbesparelser</h4>
-                    <p style="color: #666; font-style: italic;">Beregnes automatisk basert på:</p>
-                    <ul>
-                        <li>Timer spart per uke × gjennomsnittlig timelønn</li>
-                        <li>Redusert manuelt arbeid</li>
-                        <li>Mindre overtime</li>
-                        <li>Effektivisert arbeidsflyt</li>
+                    <div>
+                        <h4>💸 Kostnader (3 år)</h4>
+                        <ul id="cost-breakdown">
+                            <!-- Populated by JavaScript -->
                     </ul>
                 </div>
-                
-                <div class="card">
-                    <h4>💼 Potensiell Inntektsøkning</h4>
-                    <p style="color: #666; font-style: italic;">Basert på omallokering av tid til:</p>
-                    <ul>
-                        <li>Mer tid til salgsaktiviteter</li>
-                        <li>Forbedret kundeservice</li>
-                        <li>Strategisk arbeid</li>
-                        <li>Innovasjon og utvikling</li>
+                    <div>
+                        <h4>💰 Besparelser (3 år)</h4>
+                        <ul id="savings-breakdown">
+                            <!-- Populated by JavaScript -->
                     </ul>
                 </div>
             </div>
-            
-            <div class="alert alert-info">
-                <h4>🎯 ROI Kalkulator:</h4>
-                <p>Når du har lagt til AI-muligheter, beregnes automatisk total investering, årlig verdi, ROI og payback-periode.</p>
-                <p>Dette gir deg en komplett "Money Slide" for klientpresentasjonen.</p>
+                <div class="alert alert-success">
+                    <h4>🎯 Anbefaling:</h4>
+                    <p id="roi-recommendation">
+                        <!-- Populated by JavaScript -->
+                    </p>
+                </div>
             </div>
         </section>
         
@@ -656,153 +396,521 @@
                 <button class="btn btn-warning">📧 Send til klient</button>
             </div>
             
-            <div class="card" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border: 2px solid #dee2e6;">
+            <div class="card">
                 <h3>AI Revisjon Presentasjon - 6 Nøkkelslides</h3>
-                
-                <div style="margin: 1.5rem 0;">
-                    <h4>📋 Slide 1: Prosjektomfang & Målsettinger</h4>
-                    <div class="grid grid-4" style="margin-top: 0.5rem;">
-                        <div style="text-align: center; padding: 0.5rem; background: white; border-radius: 6px;">
-                            <div style="font-size: 1.5rem; color: #1976d2; font-weight: bold;">-</div>
-                            <small>Intervjuer fullført</small>
-                        </div>
-                        <div style="text-align: center; padding: 0.5rem; background: white; border-radius: 6px;">
-                            <div style="font-size: 1.5rem; color: #4caf50; font-weight: bold;">-</div>
-                            <small>Prosesstrinn kartlagt</small>
-                        </div>
-                        <div style="text-align: center; padding: 0.5rem; background: white; border-radius: 6px;">
-                            <div style="font-size: 1.5rem; color: #ff9800; font-weight: bold;">-</div>
-                            <small>AI-muligheter identifisert</small>
-                        </div>
-                        <div style="text-align: center; padding: 0.5rem; background: white; border-radius: 6px;">
-                            <div style="font-size: 1.5rem; color: #f44336; font-weight: bold;">-</div>
-                            <small>Problemområder funnet</small>
-                        </div>
-                    </div>
-                </div>
-                
-                <div style="margin: 1.5rem 0;">
-                    <h4>🎤 Slide 2: Kartleggingsfunn fra Intervjuer</h4>
-                    <p style="color: #666; font-style: italic;">Sammendrag av viktigste funn fra stakeholder og sluttbruker intervjuer</p>
-                    <p>Denne seksjonen populeres automatisk basert på intervjudata og identifiserte problemområder.</p>
-                </div>
-                
-                <div style="margin: 1.5rem 0;">
-                    <h4>🗺️ Slide 3: Ops Canvas - Prosess Analyse</h4>
-                    <p>Visuell fremstilling av de tre motorene med markerte problemområder:</p>
-                    <div class="grid grid-3" style="margin-top: 0.5rem;">
-                        <div style="padding: 0.5rem; background: rgba(76, 175, 80, 0.1); border: 1px solid #4caf50; border-radius: 6px;">
-                            <strong>🎯 Akkvisisjonsmotor</strong><br>
-                            <small>- tidssink, - kvalitetsrisiko</small>
-                        </div>
-                        <div style="padding: 0.5rem; background: rgba(255, 152, 0, 0.1); border: 1px solid #ff9800; border-radius: 6px;">
-                            <strong>🔧 Leveransemotor</strong><br>
-                            <small>- tidssink, - kvalitetsrisiko</small>
-                        </div>
-                        <div style="padding: 0.5rem; background: rgba(33, 150, 243, 0.1); border: 1px solid #2196f3; border-radius: 6px;">
-                            <strong>🛟 Støttemotor</strong><br>
-                            <small>- tidssink, - kvalitetsrisiko</small>
-                        </div>
-                    </div>
-                </div>
-                
-                <div style="margin: 1.5rem 0;">
-                    <h4>📊 Slide 4: AI Mulighetsmatrise</h4>
-                    <p style="color: #666; font-style: italic;">Impact vs innsats prioritering av identifiserte AI-muligheter</p>
-                    <p>Matrisen populeres automatisk med muligheter kategorisert i fire kvadranter for optimal prioritering.</p>
-                </div>
-                
-                <div style="margin: 1.5rem 0;">
-                    <h4>🛣️ Slide 5: Implementeringsplan - Roadmap</h4>
-                    <div style="background: white; padding: 1rem; border-radius: 6px; color: #666; font-style: italic;">
-                        <p>Logisk implementeringsrekkefølge basert på mulighetsmatrise prioriteringer</p>
-                        <p>Roadmap genereres automatisk med anbefalt fasing og timeline.</p>
-                    </div>
-                </div>
-                
-                <div style="margin: 1.5rem 0;">
-                    <h4>💰 Slide 6: ROI Analyse - "Money Slide"</h4>
-                    <div style="background: linear-gradient(135deg, #e8f5e8, #c8e6c9); padding: 1rem; border-radius: 6px; text-align: center; color: #666; font-style: italic;">
-                        <p>Komplett finansiell analyse av alle AI-muligheter</p>
-                        <p>Automatisk beregning av total investering, årlig verdi, ROI og payback-periode</p>
-                    </div>
-                </div>
-                
-                <div class="alert alert-success">
-                    <h4>🎯 Anbefalte neste steg:</h4>
-                    <ol>
-                        <li><strong>Godkjenn prioriterte løsninger:</strong> Start med hurtige gevinster for å bygge momentum</li>
-                        <li><strong>Etabler prosjektteam:</strong> Tildel dedikerte ressurser og definer roller</li>
-                        <li><strong>Implementer fase 1:</strong> CRM automatisering og e-post klassifisering (Q1 2024)</li>
-                        <li><strong>Planlegg fase 2:</strong> AI chatbot og prediktiv analyse (Q2-Q3 2024)</li>
-                        <li><strong>Måle og optimalisere:</strong> Etabler KPI-er og kontinuerlig forbedring</li>
-                    </ol>
-                </div>
-            </div>
-            
-            <div class="alert alert-info">
-                <h4>📋 Presentasjonsgenerator</h4>
-                <p>Når du har fullført alle trinn i AI-revisjonen, genereres automatisk en komplett presentasjon med alle 6 nøkkelslides basert på Liam Ottleys rammeverk. 
-                Presentasjonen er klar for leveranse til klient og kan prises til 10.000 USD per revisjon.</p>
+                <p>Komplett presentasjon genereres automatisk basert på alle innsamlede data.</p>
             </div>
         </section>
     </main>
     
+    <!-- Interview Popup Modal -->
+    <div id="interview-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Nytt Intervju</h3>
+                <span class="close" onclick="closeInterviewPopup()">&times;</span>
+                        </div>
+            <div class="modal-body">
+                <form id="interview-form">
+                    <div style="margin-bottom: 1rem;">
+                        <label style="font-weight: bold;">Navn på intervjuobjekt:</label>
+                        <input type="text" id="interviewee-name" class="form-input" placeholder="Ola Nordmann">
+                        </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label style="font-weight: bold;">Stilling/Rolle:</label>
+                        <input type="text" id="interviewee-role" class="form-input" placeholder="Daglig leder">
+                        </div>
+                    <div id="interview-questions">
+                        <!-- Questions will be populated by JavaScript -->
+                        </div>
+                    <div style="margin-top: 2rem;">
+                        <button type="button" class="btn btn-primary" onclick="saveInterview()">💾 Lagre Intervju</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeInterviewPopup()">Avbryt</button>
+                    </div>
+                </form>
+                </div>
+                    </div>
+                </div>
+                
+    <!-- New Project Popup Modal -->
+    <div id="project-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📋 Nytt AI Revisjon Prosjekt</h3>
+                <span class="close" onclick="closeProjectPopup()">&times;</span>
+                        </div>
+            <div class="modal-body">
+                <form id="project-form">
+                    <div style="margin-bottom: 1rem;">
+                        <label style="font-weight: bold;">Bedriftsnavn:</label>
+                        <input type="text" id="company-name" class="form-input" placeholder="Bedrift AS" required>
+                        </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label style="font-weight: bold;">Bransje:</label>
+                        <select id="industry" class="form-input" required>
+                            <option value="">Velg bransje</option>
+                            <option value="teknologi">Teknologi</option>
+                            <option value="finans">Finans</option>
+                            <option value="helse">Helse</option>
+                            <option value="utdanning">Utdanning</option>
+                            <option value="eiendom">Eiendom</option>
+                            <option value="handel">Handel</option>
+                            <option value="produksjon">Produksjon</option>
+                            <option value="tjenester">Tjenester</option>
+                            <option value="annet">Annet</option>
+                        </select>
+                        </div>
+                    <div class="grid grid-2">
+                        <div>
+                            <label style="font-weight: bold;">Antall ansatte:</label>
+                            <select id="company-size" class="form-input" required>
+                                <option value="">Velg størrelse</option>
+                                <option value="1-10">1-10 ansatte</option>
+                                <option value="11-50">11-50 ansatte</option>
+                                <option value="51-200">51-200 ansatte</option>
+                                <option value="201-1000">201-1000 ansatte</option>
+                                <option value="1000+">1000+ ansatte</option>
+                            </select>
+                    </div>
+                        <div>
+                            <label style="font-weight: bold;">Årlig omsetning (NOK):</label>
+                            <select id="revenue" class="form-input">
+                                <option value="">Velg omsetning</option>
+                                <option value="0-5m">0-5 millioner</option>
+                                <option value="5-25m">5-25 millioner</option>
+                                <option value="25-100m">25-100 millioner</option>
+                                <option value="100-500m">100-500 millioner</option>
+                                <option value="500m+">500+ millioner</option>
+                            </select>
+                </div>
+                </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label style="font-weight: bold;">Kontaktperson:</label>
+                        <input type="text" id="contact-person" class="form-input" placeholder="Ola Nordmann">
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label style="font-weight: bold;">E-post:</label>
+                        <input type="email" id="contact-email" class="form-input" placeholder="ola@bedrift.no">
+                </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label style="font-weight: bold;">Hovedutfordringer (valgfritt):</label>
+                        <textarea id="main-challenges" class="form-input" rows="3" placeholder="Beskriv de største utfordringene bedriften står overfor..."></textarea>
+                    </div>
+                    <div style="margin-top: 2rem;">
+                        <button type="button" class="btn btn-primary" onclick="saveNewProject()">🚀 Opprett Prosjekt</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeProjectPopup()">Avbryt</button>
+                </div>
+                </form>
+                </div>
+            </div>
+            </div>
+                
+    <!-- Google Fonts for AIKI theme -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- JavaScript files -->
+    <script src="js/aiki-common.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/components.js"></script>
+    
     <script>
-        function showSection(sectionId) {
-            // Hide all sections
-            const sections = document.querySelectorAll('.content-section');
-            sections.forEach(section => {
-                section.classList.remove('active');
+        // Global variables for project management
+        let currentProject = 'demo';
+        let projects = {
+            'demo': {
+                name: 'Demo Bedrift AS',
+                industry: 'teknologi',
+                size: '51-200',
+                contact: 'Demo Kontakt',
+                email: 'demo@bedrift.no',
+                created: '2024-01-15',
+                interviews: [],
+                opportunities: [],
+                processes: [],
+                progress: 15
+            }
+        };
+        
+        // Project management functions
+        function selectProject(projectId) {
+            currentProject = projectId;
+            
+            // Update active project in list
+            document.querySelectorAll('.project-item').forEach(item => {
+                item.classList.remove('active');
             });
+            document.querySelector(`[data-project="${projectId}"]`).classList.add('active');
             
-            // Remove active class from all nav buttons
-            const buttons = document.querySelectorAll('.nav-button');
-            buttons.forEach(button => {
-                button.classList.remove('active');
-            });
-            
-            // Show selected section
-            document.getElementById(sectionId).classList.add('active');
-            
-            // Add active class to clicked button
-            event.target.classList.add('active');
+            // Update dashboard display
+            updateDashboard();
         }
         
-        // Add some interactivity
+        function updateDashboard() {
+            const project = projects[currentProject];
+            if (!project) return;
+            
+            document.getElementById('current-project-name').textContent = project.name;
+            document.getElementById('project-name-roi').textContent = project.name;
+            document.getElementById('interviews-count').textContent = project.interviews.length;
+            document.getElementById('opportunities-count').textContent = project.opportunities.length;
+            document.getElementById('project-progress').style.width = project.progress + '%';
+            document.getElementById('progress-text').textContent = `Prosjektfremgang: ${project.progress}%`;
+        }
+        
+        function openNewProjectPopup() {
+            document.getElementById('project-modal').style.display = 'block';
+        }
+        
+        function closeProjectPopup() {
+            document.getElementById('project-modal').style.display = 'none';
+            document.getElementById('project-form').reset();
+        }
+        
+        function saveNewProject() {
+            const companyName = document.getElementById('company-name').value;
+            const industry = document.getElementById('industry').value;
+            const companySize = document.getElementById('company-size').value;
+            const revenue = document.getElementById('revenue').value;
+            const contactPerson = document.getElementById('contact-person').value;
+            const contactEmail = document.getElementById('contact-email').value;
+            const mainChallenges = document.getElementById('main-challenges').value;
+            
+            if (!companyName || !industry || !companySize) {
+                alert('Vennligst fyll ut alle obligatoriske felt (bedriftsnavn, bransje, antall ansatte).');
+                return;
+            }
+            
+            // Generate project ID
+            const projectId = companyName.toLowerCase().replace(/[^a-z0-9]/g, '');
+            
+            // Create new project
+            projects[projectId] = {
+                name: companyName,
+                industry: industry,
+                size: companySize,
+                revenue: revenue,
+                contact: contactPerson,
+                email: contactEmail,
+                challenges: mainChallenges,
+                created: new Date().toISOString().split('T')[0],
+                interviews: [],
+                opportunities: [],
+                processes: [],
+                progress: 0
+            };
+            
+            // Add to project list
+            const projectList = document.getElementById('project-list');
+            const newProjectItem = document.createElement('div');
+            newProjectItem.className = 'project-item';
+            newProjectItem.setAttribute('data-project', projectId);
+            newProjectItem.onclick = () => selectProject(projectId);
+            newProjectItem.innerHTML = `
+                <div class="project-header">
+                    <strong>🏢 ${companyName}</strong>
+                    <span class="badge badge-info">Nytt</span>
+                </div>
+                <small>Startet: ${new Date().toLocaleDateString('no-NO')}</small>
+            `;
+            
+            projectList.appendChild(newProjectItem);
+            
+            // Select the new project
+            selectProject(projectId);
+            
+            alert(`Prosjekt "${companyName}" opprettet! 🎉`);
+            closeProjectPopup();
+        }
+        
+        // Interview popup functionality
+        function openInterviewPopup(type) {
+            const modal = document.getElementById('interview-modal');
+            const title = document.getElementById('modal-title');
+            const questionsContainer = document.getElementById('interview-questions');
+            
+            title.textContent = type === 'stakeholder' ? 'Nytt Stakeholder Intervju' : 'Nytt Sluttbruker Intervju';
+            
+            const questions = type === 'stakeholder' ? [
+                'Kan du beskrive din rolle og teamets hovedansvar?',
+                'Hva er de viktigste målene eller KPI-ene teamet ditt er ansvarlig for?',
+                'Hvor ser du de største flaskehalser eller forsinkelser i arbeidsflyt?',
+                'Hva er de største frustrasjonene med nåværende teknologistakk?',
+                'Hvis du hadde en tryllestav, hvilket problem ville du løst over natten?'
+            ] : [
+                'Kan du ta meg gjennom en typisk arbeidsdag eller -uke?',
+                'Hva er de mest manuelle og repetitive delene av jobben din?',
+                'Hvilken del av prosessen tar mest tid eller er mest frustrerende?',
+                'Hvis du hadde en assistent, hvilke oppgaver ville du gitt dem først?',
+                'Er det dobbel-innlegging av data mellom forskjellige systemer?'
+            ];
+            
+            questionsContainer.innerHTML = questions.map((q, i) => `
+                <div class="question-group" style="margin-bottom: 1.5rem;">
+                    <label style="font-weight: bold; display: block; margin-bottom: 0.5rem;">${i + 1}. ${q}</label>
+                    <textarea class="form-input" rows="3" placeholder="Skriv svaret her..."></textarea>
+                </div>
+            `).join('');
+            
+            // Store interview type
+            modal.setAttribute('data-interview-type', type);
+            modal.style.display = 'block';
+        }
+        
+        function closeInterviewPopup() {
+            document.getElementById('interview-modal').style.display = 'none';
+            document.getElementById('interview-form').reset();
+        }
+        
+        function saveInterview() {
+            const name = document.getElementById('interviewee-name').value;
+            const role = document.getElementById('interviewee-role').value;
+            const textareas = document.querySelectorAll('#interview-questions textarea');
+            const answers = Array.from(textareas).map(ta => ta.value);
+            const type = document.getElementById('interview-modal').getAttribute('data-interview-type');
+            
+            if (!name || !role) {
+                alert('Vennligst fyll ut navn og rolle på intervjuobjektet.');
+                return;
+            }
+            
+            if (!answers.some(answer => answer.trim())) {
+                alert('Vennligst fyll ut minst ett spørsmål.');
+                return;
+            }
+            
+            // Save interview to current project
+            const interview = {
+                name: name,
+                role: role,
+                type: type,
+                answers: answers,
+                date: new Date().toISOString().split('T')[0]
+            };
+            
+            projects[currentProject].interviews.push(interview);
+            
+            // Update progress
+            projects[currentProject].progress = Math.min(projects[currentProject].progress + 10, 100);
+            
+            // Update dashboard
+            updateDashboard();
+            
+            // Update interview list
+            updateInterviewList();
+            
+            alert(`Intervju med ${name} lagret! ✅`);
+            closeInterviewPopup();
+        }
+        
+        // Process management functions
+        function addProcess(engine) {
+            const processName = prompt(`Navn på prosess i ${engine === 'acquisition' ? 'Akkvisisjonsmotor' : engine === 'delivery' ? 'Leveransemotor' : 'Støttemotor'}:`);
+            if (!processName) return;
+            
+            const isTimeSink = confirm('Er dette en tidssink? (manuell, repetitiv prosess)');
+            const isQualityRisk = confirm('Er dette en kvalitetsrisiko? (utsatt for menneskelige feil)');
+            
+            const process = {
+                name: processName,
+                engine: engine,
+                timeSink: isTimeSink,
+                qualityRisk: isQualityRisk,
+                date: new Date().toISOString().split('T')[0]
+            };
+            
+            projects[currentProject].processes.push(process);
+            projects[currentProject].progress = Math.min(projects[currentProject].progress + 5, 100);
+            
+            updateDashboard();
+            updateProcessDisplay();
+            
+            alert(`Prosess "${processName}" lagt til! 📝`);
+        }
+        
+        function updateProcessDisplay() {
+            const project = projects[currentProject];
+            if (!project) return;
+            
+            const acquisitionContainer = document.getElementById('acquisition-processes');
+            const deliveryContainer = document.getElementById('delivery-processes');
+            const supportContainer = document.getElementById('support-processes');
+            
+            // Clear containers
+            [acquisitionContainer, deliveryContainer, supportContainer].forEach(container => {
+                container.innerHTML = '<div style="text-align: center; padding: 1rem; color: #666; font-style: italic;">Ingen prosesser kartlagt ennå</div>';
+            });
+            
+            // Add processes
+            project.processes.forEach(process => {
+                const processElement = document.createElement('div');
+                processElement.className = 'process-item';
+                processElement.style.cssText = 'padding: 0.5rem; margin: 0.25rem 0; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #ddd;';
+                
+                if (process.timeSink) {
+                    processElement.style.borderLeftColor = '#ff9800';
+                    processElement.style.background = '#fff3cd';
+                }
+                if (process.qualityRisk) {
+                    processElement.style.borderLeftColor = '#f44336';
+                    processElement.style.background = '#ffebee';
+                }
+                
+                processElement.innerHTML = `
+                    <div style="font-weight: bold;">${process.name}</div>
+                    <small>${process.timeSink ? '⏱️ Tidssink' : ''} ${process.qualityRisk ? '⚠️ Kvalitetsrisiko' : ''}</small>
+                `;
+                
+                const container = process.engine === 'acquisition' ? acquisitionContainer : 
+                                process.engine === 'delivery' ? deliveryContainer : supportContainer;
+                
+                if (container.children[0].textContent.includes('Ingen prosesser')) {
+                    container.innerHTML = '';
+                }
+                container.appendChild(processElement);
+            });
+        }
+        
+        function updateInterviewList() {
+            const project = projects[currentProject];
+            if (!project) return;
+            
+            const container = document.getElementById('completed-interviews');
+            
+            if (project.interviews.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: #666; font-style: italic;">
+                        <p>Ingen intervjuer registrert ennå</p>
+                        <p>Start med å gjennomføre stakeholder og sluttbruker intervjuer</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = project.interviews.map(interview => `
+                <div class="interview-item" style="background: #f8f9fa; padding: 1rem; margin: 0.5rem 0; border-radius: 8px; border-left: 4px solid ${interview.type === 'stakeholder' ? '#2196f3' : '#4caf50'};">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong>${interview.name}</strong> - ${interview.role}
+                            <br><small>${interview.type === 'stakeholder' ? '👥 Stakeholder' : '👤 Sluttbruker'} • ${new Date(interview.date).toLocaleDateString('no-NO')}</small>
+                        </div>
+                        <span class="badge ${interview.type === 'stakeholder' ? 'badge-info' : 'badge-success'}">
+                            ${interview.answers.filter(a => a.trim()).length} svar
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Make functions and variables globally available
+        window.currentProject = currentProject;
+        window.projects = projects;
+        window.selectProject = selectProject;
+        window.updateDashboard = updateDashboard;
+        window.openNewProjectPopup = openNewProjectPopup;
+        window.closeProjectPopup = closeProjectPopup;
+        window.saveNewProject = saveNewProject;
+        window.openInterviewPopup = openInterviewPopup;
+        window.closeInterviewPopup = closeInterviewPopup;
+        window.saveInterview = saveInterview;
+        window.addProcess = addProcess;
+        window.updateProcessDisplay = updateProcessDisplay;
+        window.updateInterviewList = updateInterviewList;
+        
+        // Initialize application
         document.addEventListener('DOMContentLoaded', function() {
-            // Animate progress bars
-            const progressBars = document.querySelectorAll('.progress-fill');
-            progressBars.forEach(bar => {
-                const width = bar.style.width;
-                bar.style.width = '0%';
-                setTimeout(() => {
-                    bar.style.width = width;
-                }, 500);
-            });
+            // Initialize dashboard
+            updateDashboard();
+            updateInterviewList();
+            updateProcessDisplay();
             
-            // Add click handlers for cards
-            const cards = document.querySelectorAll('.card');
-            cards.forEach(card => {
-                card.addEventListener('click', function(e) {
-                    // Only if clicking the card itself, not buttons inside
-                    if (e.target === this || e.target.tagName === 'H3' || e.target.tagName === 'P') {
-                        this.style.transform = 'scale(1.02)';
-                        setTimeout(() => {
-                            this.style.transform = '';
-                        }, 150);
-                    }
-                });
-            });
-            
-            // Opportunity chip click handlers
-            const chips = document.querySelectorAll('.opportunity-chip');
-            chips.forEach(chip => {
-                chip.addEventListener('click', function() {
-                    alert('AI-mulighet: ' + this.textContent + '\n\nKlikk for å redigere detaljer og ROI-beregninger.');
-                });
-            });
+            // Initialize drag and drop if function exists
+            if (window.initializeDragAndDrop) {
+                setTimeout(window.initializeDragAndDrop, 100);
+            }
         });
+        
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const interviewModal = document.getElementById('interview-modal');
+            const projectModal = document.getElementById('project-modal');
+            
+            if (event.target === interviewModal) {
+                closeInterviewPopup();
+            }
+            if (event.target === projectModal) {
+                closeProjectPopup();
+            }
+        }
     </script>
+    
+    <style>
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            padding: 1.5rem 2rem;
+            background: linear-gradient(135deg, #1976d2, #1565c0);
+            color: white;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+        }
+        
+        .close {
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+        
+        .close:hover {
+            opacity: 1;
+        }
+        
+        .modal-body {
+            padding: 2rem;
+        }
+        
+        .question-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+    </style>
 </body>
 </html>
