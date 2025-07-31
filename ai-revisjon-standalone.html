@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Revisjon Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1976d2, #1565c0);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+        
+        .nav {
+            background: #f5f5f5;
+            padding: 0.5rem 2rem;
+            border-bottom: 1px solid #ddd;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        
+        .nav-button {
+            display: inline-block;
+            margin: 0 0.5rem 0.5rem 0;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background: white;
+            color: #333;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .nav-button:hover {
+            background: #e3f2fd;
+            transform: translateY(-1px);
+        }
+        
+        .nav-button.active {
+            background: #1976d2;
+            color: white;
+        }
+        
+        .main {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+        .grid-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: #1976d2;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #1565c0;
+            transform: translateY(-1px);
+        }
+        
+        .btn-success {
+            background: #4caf50;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #388e3c;
+        }
+        
+        .btn-warning {
+            background: #ff9800;
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background: #f57c00;
+        }
+        
+        .progress-bar {
+            background: #e0e0e0;
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #4caf50, #8bc34a);
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.3s ease;
+        }
+        
+        .matrix-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 400px;
+            margin: 2rem auto;
+            background: linear-gradient(135deg, #ffebee 0%, #e8f5e8 100%);
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .matrix-label {
+            position: absolute;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        
+        .matrix-quadrant {
+            position: absolute;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .opportunity-chip {
+            position: absolute;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .opportunity-chip:hover {
+            transform: scale(1.05);
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .table th,
+        .table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 12px;
+            color: white;
+            background: linear-gradient(135deg, #2196f3, #1976d2);
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+        
+        .process-step {
+            background: #f8f9fa;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            border-left: 4px solid #e0e0e0;
+        }
+        
+        .process-step.warning {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+        }
+        
+        .process-step.error {
+            background: #ffebee;
+            border-left-color: #f44336;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        
+        .alert-info {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            color: #1565c0;
+        }
+        
+        .alert-success {
+            background: #e8f5e8;
+            border-left: 4px solid #4caf50;
+            color: #2e7d32;
+        }
+        
+        .badge {
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .badge-success { background: #4caf50; }
+        .badge-warning { background: #ff9800; }
+        .badge-error { background: #f44336; }
+        .badge-info { background: #2196f3; }
+        
+        @media (max-width: 768px) {
+            .main {
+                padding: 1rem;
+            }
+            
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav {
+                padding: 0.5rem 1rem;
+            }
+            
+            .header {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>🤖 AI Revisjon Platform</h1>
+        <p>Komplett løsning for AI-transformasjon basert på Liam Ottleys rammeverk</p>
+    </header>
+    
+    <nav class="nav">
+        <button class="nav-button active" onclick="showSection('dashboard')">📋 Dashboard</button>
+        <button class="nav-button" onclick="showSection('interviews')">🎤 Intervjuer</button>
+        <button class="nav-button" onclick="showSection('process')">🗺️ Prosess Mapping</button>
+        <button class="nav-button" onclick="showSection('matrix')">📊 Mulighetsmatrise</button>
+        <button class="nav-button" onclick="showSection('roi')">💰 ROI Kalkulator</button>
+        <button class="nav-button" onclick="showSection('presentation')">📑 Presentasjon</button>
+    </nav>
+    
+    <main class="main">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section active">
+            <h2>📋 Dashboard</h2>
+            
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3>🎯 Prosjektoversikt</h3>
+                    <p>Opprett og administrer AI revisjon prosjekter basert på Liam Ottleys metodikk</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    <small>Prosjektfremgang: 0%</small>
+                    <br><br>
+                    <button class="btn btn-success">Nytt Prosjekt</button>
+                </div>
+                
+                <div class="card">
+                    <h3>📊 Gjennomføringsstatistikk</h3>
+                    <div class="grid grid-2" style="gap: 1rem; margin-top: 1rem;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; color: #1976d2; font-weight: bold;">0</div>
+                            <small>Intervjuer fullført</small>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; color: #4caf50; font-weight: bold;">0</div>
+                            <small>AI-muligheter identifisert</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="alert alert-info">
+                <h4>🚀 Kom i gang med AI-revisjonen</h4>
+                <ol>
+                    <li><strong>Intervjuer:</strong> Start med å gjennomføre stakeholder og sluttbruker intervjuer</li>
+                    <li><strong>Prosess Mapping:</strong> Kartlegg bedriftens kjerneprosesser i Ops Canvas</li>
+                    <li><strong>Mulighetsmatrise:</strong> Identifiser og prioriter AI-muligheter</li>
+                    <li><strong>ROI Kalkulator:</strong> Beregn finansiell avkastning</li>
+                    <li><strong>Presentasjon:</strong> Generer komplett klientrapport</li>
+                </ol>
+            </div>
+            
+            <div class="card">
+                <h3>📈 Estimert verdi</h3>
+                <div class="grid grid-4">
+                    <div class="stat-card" style="background: linear-gradient(135deg, #4caf50, #388e3c);">
+                        <div>Total ROI</div>
+                        <div class="stat-value">-</div>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #ff9800, #f57c00);">
+                        <div>Payback</div>
+                        <div class="stat-value">-</div>
+                        <small>måneder</small>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #2196f3, #1565c0);">
+                        <div>Årlig besparelse</div>
+                        <div class="stat-value">-</div>
+                        <small>NOK</small>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #9c27b0, #7b1fa2);">
+                        <div>Investering</div>
+                        <div class="stat-value">-</div>
+                        <small>NOK</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Interviews Section -->
+        <section id="interviews" class="content-section">
+            <h2>🎤 Intervju Modul</h2>
+            <p>Strukturerte intervjuer for å forstå bedriftens behov og identifisere AI-muligheter</p>
+            
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3>👥 Stakeholder Intervjuer</h3>
+                    <p><em>30.000-fots perspektiv fra ledelse</em></p>
+                    
+                    <h4>Nøkkelspørsmål:</h4>
+                    <ul style="margin: 1rem 0;">
+                        <li>Kan du beskrive din rolle og teamets hovedansvar?</li>
+                        <li>Hva er de viktigste målene eller KPI-ene teamet ditt er ansvarlig for?</li>
+                        <li>Hvor ser du de største flaskehalser eller forsinkelser i arbeidsflyt?</li>
+                        <li>Hva er de største frustrasjonene med nåværende teknologistakk?</li>
+                        <li>Hvis du hadde en tryllestav, hvilket problem ville du løst over natten?</li>
+                    </ul>
+                    
+                    <div class="alert alert-info">
+                        <strong>Tips:</strong> Fokuser på strategiske utfordringer og mål på høyt nivå
+                    </div>
+                    
+                    <button class="btn btn-primary">Nytt Stakeholder Intervju</button>
+                </div>
+                
+                <div class="card">
+                    <h3>👤 Sluttbruker Intervjuer</h3>
+                    <p><em>Operasjonelt perspektiv fra de som gjør arbeidet</em></p>
+                    
+                    <h4>Nøkkelspørsmål:</h4>
+                    <ul style="margin: 1rem 0;">
+                        <li>Kan du ta meg gjennom en typisk arbeidsdag eller -uke?</li>
+                        <li>Hva er de mest manuelle og repetitive delene av jobben din?</li>
+                        <li>Hvilken del av prosessen tar mest tid eller er mest frustrerende?</li>
+                        <li>Hvis du hadde en assistent, hvilke oppgaver ville du gitt dem først?</li>
+                        <li>Er det dobbel-innlegging av data mellom forskjellige systemer?</li>
+                    </ul>
+                    
+                    <div class="alert alert-info">
+                        <strong>Tips:</strong> Søk etter konkrete, daglige smertepunkter og ineffektiviteter
+                    </div>
+                    
+                    <button class="btn btn-primary">Nytt Sluttbruker Intervju</button>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>📋 Intervju Status</h3>
+                <div style="text-align: center; padding: 3rem;">
+                    <p style="color: #666; font-style: italic;">Ingen intervjuer registrert ennå</p>
+                    <p>Start med å gjennomføre stakeholder og sluttbruker intervjuer</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Process Mapping Section -->
+        <section id="process" class="content-section">
+            <h2>🗺️ Prosess Mapping - Ops Canvas</h2>
+            <p>Kartlegg bedriftens kjerneprosesser i de tre hovedmotorene og identifiser ineffektiviteter</p>
+            
+            <div class="grid grid-3">
+                <div class="card">
+                    <h3>🎯 Akkvisisjonsmotor</h3>
+                    <p><em>Hvordan finner og signerer dere nye kunder?</em></p>
+                    
+                    <div style="margin-top: 1rem; text-align: center; padding: 2rem; color: #666; font-style: italic;">
+                        <p>Ingen prosesstrinn kartlagt ennå</p>
+                        <p>Legg til prosesser fra intervjufunn</p>
+                    </div>
+                    
+                    <button class="btn btn-success">+ Legg til prosess</button>
+                </div>
+                
+                <div class="card">
+                    <h3>🔧 Leveransemotor</h3>
+                    <p><em>Hvordan leverer dere produktet eller tjenesten?</em></p>
+                    
+                    <div style="margin-top: 1rem; text-align: center; padding: 2rem; color: #666; font-style: italic;">
+                        <p>Ingen prosesstrinn kartlagt ennå</p>
+                        <p>Legg til prosesser fra intervjufunn</p>
+                    </div>
+                    
+                    <button class="btn btn-warning">+ Legg til prosess</button>
+                </div>
+                
+                <div class="card">
+                    <h3>🛟 Støttemotor</h3>
+                    <p><em>Hvordan håndterer dere kundesupport og oppfølging?</em></p>
+                    
+                    <div style="margin-top: 1rem; text-align: center; padding: 2rem; color: #666; font-style: italic;">
+                        <p>Ingen prosesstrinn kartlagt ennå</p>
+                        <p>Legg til prosesser fra intervjufunn</p>
+                    </div>
+                    
+                    <button class="btn btn-primary">+ Legg til prosess</button>
+                </div>
+            </div>
+            
+            <div class="alert alert-success">
+                <h4>💡 Identifiser problemområder:</h4>
+                <p><strong>Tidssink (Gul):</strong> Manuelle, repetitive og tidkrevende prosesser som reduserer produktivitet</p>
+                <p><strong>Kvalitetsrisiko (Rød):</strong> Prosesser utsatt for menneskelige feil som kan påvirke leveransekvalitet</p>
+                <p>Disse områdene er kandidater for AI-automatisering og optimalisering.</p>
+            </div>
+        </section>
+        
+        <!-- Opportunity Matrix Section -->
+        <section id="matrix" class="content-section">
+            <h2>📊 AI Mulighetsmatrise</h2>
+            <p>Prioriter AI-muligheter basert på forretningsimpact vs implementeringsinnsats</p>
+            
+            <div class="matrix-container">
+                <!-- Axis labels -->
+                <div class="matrix-label" style="top: -30px; left: 50%; transform: translateX(-50%);">HØY IMPACT</div>
+                <div class="matrix-label" style="bottom: -30px; left: 50%; transform: translateX(-50%);">LAV IMPACT</div>
+                <div class="matrix-label" style="left: -80px; top: 50%; transform: translateY(-50%) rotate(-90deg);">LAV INNSATS</div>
+                <div class="matrix-label" style="right: -80px; top: 50%; transform: translateY(-50%) rotate(90deg);">HØY INNSATS</div>
+                
+                <!-- Quadrant labels -->
+                <div class="matrix-quadrant" style="top: 10px; left: 10px; background: rgba(76, 175, 80, 0.9);">
+                    🌟 HURTIGE GEVINSTER
+                </div>
+                <div class="matrix-quadrant" style="top: 10px; right: 10px; background: rgba(33, 150, 243, 0.9);">
+                    🚀 STORE SATSINGER
+                </div>
+                <div class="matrix-quadrant" style="bottom: 10px; left: 10px; background: rgba(255, 152, 0, 0.9);">
+                    👍 NICE-TO-HAVE
+                </div>
+                <div class="matrix-quadrant" style="bottom: 10px; right: 10px; background: rgba(244, 67, 54, 0.9);">
+                    🚫 DEPRIORITÉR
+                </div>
+                
+                <!-- Center lines -->
+                <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #666; opacity: 0.3;"></div>
+                <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: #666; opacity: 0.3;"></div>
+                
+                <!-- Opportunity chips - will be populated from data -->
+                <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: #666; font-style: italic; text-align: center;">
+                    <p>Ingen AI-muligheter kartlagt ennå</p>
+                    <small>Legg til muligheter basert på prosess-analyse</small>
+                </div>
+            </div>
+            
+            <div class="grid grid-4">
+                <div class="card" style="text-align: center; border-left: 4px solid #4caf50;">
+                    <h3 style="color: #4caf50;">🌟 Hurtige Gevinster</h3>
+                    <div style="font-size: 2.5rem; color: #4caf50; font-weight: bold;">0</div>
+                    <p>Høy impact, lav innsats<br><strong>Start her!</strong></p>
+                </div>
+                <div class="card" style="text-align: center; border-left: 4px solid #2196f3;">
+                    <h3 style="color: #2196f3;">🚀 Store Satsinger</h3>
+                    <div style="font-size: 2.5rem; color: #2196f3; font-weight: bold;">0</div>
+                    <p>Transformative prosjekter<br><strong>Langsiktig</strong></p>
+                </div>
+                <div class="card" style="text-align: center; border-left: 4px solid #ff9800;">
+                    <h3 style="color: #ff9800;">👍 Nice-to-Have</h3>
+                    <div style="font-size: 2.5rem; color: #ff9800; font-weight: bold;">0</div>
+                    <p>Enkle forbedringer<br><strong>Når tid tillater</strong></p>
+                </div>
+                <div class="card" style="text-align: center; border-left: 4px solid #f44336;">
+                    <h3 style="color: #f44336;">🚫 Deprioritér</h3>
+                    <div style="font-size: 2.5rem; color: #f44336; font-weight: bold;">0</div>
+                    <p>Tids- og pengegruver<br><strong>Unngå!</strong></p>
+                </div>
+            </div>
+            
+            <div class="alert alert-info">
+                <h4>📋 Anbefalte prioriteringer:</h4>
+                <p><strong>Fase 1 (0-3 mnd):</strong> Implementer hurtige gevinster for å bygge momentum og tillit</p>
+                <p><strong>Fase 2 (3-12 mnd):</strong> Tackle store satsinger basert på suksess fra fase 1</p>
+                <p><strong>Fase 3 (12+ mnd):</strong> Vurder nice-to-have prosjekter når kapasitet tillater</p>
+            </div>
+        </section>
+        
+        <!-- ROI Calculator Section -->
+        <section id="roi" class="content-section">
+            <h2>💰 ROI Kalkulator - "Money Slide"</h2>
+            <p>Beregn finansiell avkastning på AI-investeringer med automatiske kalkulasjoner</p>
+            
+            <div class="grid grid-4">
+                <div class="stat-card" style="background: linear-gradient(135deg, #1976d2, #1565c0);">
+                    <div>Total Investering</div>
+                    <div class="stat-value">-</div>
+                    <small>NOK</small>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #4caf50, #388e3c);">
+                    <div>Årlig Besparelse</div>
+                    <div class="stat-value">-</div>
+                    <small>NOK</small>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #ff9800, #f57c00);">
+                    <div>ROI</div>
+                    <div class="stat-value">-</div>
+                    <small>Avkastning</small>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #e91e63, #c2185b);">
+                    <div>Payback</div>
+                    <div class="stat-value">-</div>
+                    <small>måneder</small>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>📊 Detaljert ROI Analyse</h3>
+                <div style="text-align: center; padding: 3rem; color: #666; font-style: italic;">
+                    <p>Ingen ROI-beregninger ennå</p>
+                    <p>Legg til AI-muligheter i Mulighetsmatrise først</p>
+                </div>
+            </div>
+            
+            <div class="grid grid-2">
+                <div class="card">
+                    <h4>📈 Direkte Kostnadsbesparelser</h4>
+                    <p style="color: #666; font-style: italic;">Beregnes automatisk basert på:</p>
+                    <ul>
+                        <li>Timer spart per uke × gjennomsnittlig timelønn</li>
+                        <li>Redusert manuelt arbeid</li>
+                        <li>Mindre overtime</li>
+                        <li>Effektivisert arbeidsflyt</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h4>💼 Potensiell Inntektsøkning</h4>
+                    <p style="color: #666; font-style: italic;">Basert på omallokering av tid til:</p>
+                    <ul>
+                        <li>Mer tid til salgsaktiviteter</li>
+                        <li>Forbedret kundeservice</li>
+                        <li>Strategisk arbeid</li>
+                        <li>Innovasjon og utvikling</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="alert alert-info">
+                <h4>🎯 ROI Kalkulator:</h4>
+                <p>Når du har lagt til AI-muligheter, beregnes automatisk total investering, årlig verdi, ROI og payback-periode.</p>
+                <p>Dette gir deg en komplett "Money Slide" for klientpresentasjonen.</p>
+            </div>
+        </section>
+        
+        <!-- Presentation Section -->
+        <section id="presentation" class="content-section">
+            <h2>📑 Presentasjonsgenerator</h2>
+            <p>Automatisk sammenstilling av alle funn til profesjonell klientpresentasjon</p>
+            
+            <div style="margin-bottom: 2rem;">
+                <button class="btn btn-success">📄 Eksporter til PDF</button>
+                <button class="btn btn-primary">🖨️ Skriv ut</button>
+                <button class="btn btn-warning">📧 Send til klient</button>
+            </div>
+            
+            <div class="card" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border: 2px solid #dee2e6;">
+                <h3>AI Revisjon Presentasjon - 6 Nøkkelslides</h3>
+                
+                <div style="margin: 1.5rem 0;">
+                    <h4>📋 Slide 1: Prosjektomfang & Målsettinger</h4>
+                    <div class="grid grid-4" style="margin-top: 0.5rem;">
+                        <div style="text-align: center; padding: 0.5rem; background: white; border-radius: 6px;">
+                            <div style="font-size: 1.5rem; color: #1976d2; font-weight: bold;">-</div>
+                            <small>Intervjuer fullført</small>
+                        </div>
+                        <div style="text-align: center; padding: 0.5rem; background: white; border-radius: 6px;">
+                            <div style="font-size: 1.5rem; color: #4caf50; font-weight: bold;">-</div>
+                            <small>Prosesstrinn kartlagt</small>
+                        </div>
+                        <div style="text-align: center; padding: 0.5rem; background: white; border-radius: 6px;">
+                            <div style="font-size: 1.5rem; color: #ff9800; font-weight: bold;">-</div>
+                            <small>AI-muligheter identifisert</small>
+                        </div>
+                        <div style="text-align: center; padding: 0.5rem; background: white; border-radius: 6px;">
+                            <div style="font-size: 1.5rem; color: #f44336; font-weight: bold;">-</div>
+                            <small>Problemområder funnet</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin: 1.5rem 0;">
+                    <h4>🎤 Slide 2: Kartleggingsfunn fra Intervjuer</h4>
+                    <p style="color: #666; font-style: italic;">Sammendrag av viktigste funn fra stakeholder og sluttbruker intervjuer</p>
+                    <p>Denne seksjonen populeres automatisk basert på intervjudata og identifiserte problemområder.</p>
+                </div>
+                
+                <div style="margin: 1.5rem 0;">
+                    <h4>🗺️ Slide 3: Ops Canvas - Prosess Analyse</h4>
+                    <p>Visuell fremstilling av de tre motorene med markerte problemområder:</p>
+                    <div class="grid grid-3" style="margin-top: 0.5rem;">
+                        <div style="padding: 0.5rem; background: rgba(76, 175, 80, 0.1); border: 1px solid #4caf50; border-radius: 6px;">
+                            <strong>🎯 Akkvisisjonsmotor</strong><br>
+                            <small>- tidssink, - kvalitetsrisiko</small>
+                        </div>
+                        <div style="padding: 0.5rem; background: rgba(255, 152, 0, 0.1); border: 1px solid #ff9800; border-radius: 6px;">
+                            <strong>🔧 Leveransemotor</strong><br>
+                            <small>- tidssink, - kvalitetsrisiko</small>
+                        </div>
+                        <div style="padding: 0.5rem; background: rgba(33, 150, 243, 0.1); border: 1px solid #2196f3; border-radius: 6px;">
+                            <strong>🛟 Støttemotor</strong><br>
+                            <small>- tidssink, - kvalitetsrisiko</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin: 1.5rem 0;">
+                    <h4>📊 Slide 4: AI Mulighetsmatrise</h4>
+                    <p style="color: #666; font-style: italic;">Impact vs innsats prioritering av identifiserte AI-muligheter</p>
+                    <p>Matrisen populeres automatisk med muligheter kategorisert i fire kvadranter for optimal prioritering.</p>
+                </div>
+                
+                <div style="margin: 1.5rem 0;">
+                    <h4>🛣️ Slide 5: Implementeringsplan - Roadmap</h4>
+                    <div style="background: white; padding: 1rem; border-radius: 6px; color: #666; font-style: italic;">
+                        <p>Logisk implementeringsrekkefølge basert på mulighetsmatrise prioriteringer</p>
+                        <p>Roadmap genereres automatisk med anbefalt fasing og timeline.</p>
+                    </div>
+                </div>
+                
+                <div style="margin: 1.5rem 0;">
+                    <h4>💰 Slide 6: ROI Analyse - "Money Slide"</h4>
+                    <div style="background: linear-gradient(135deg, #e8f5e8, #c8e6c9); padding: 1rem; border-radius: 6px; text-align: center; color: #666; font-style: italic;">
+                        <p>Komplett finansiell analyse av alle AI-muligheter</p>
+                        <p>Automatisk beregning av total investering, årlig verdi, ROI og payback-periode</p>
+                    </div>
+                </div>
+                
+                <div class="alert alert-success">
+                    <h4>🎯 Anbefalte neste steg:</h4>
+                    <ol>
+                        <li><strong>Godkjenn prioriterte løsninger:</strong> Start med hurtige gevinster for å bygge momentum</li>
+                        <li><strong>Etabler prosjektteam:</strong> Tildel dedikerte ressurser og definer roller</li>
+                        <li><strong>Implementer fase 1:</strong> CRM automatisering og e-post klassifisering (Q1 2024)</li>
+                        <li><strong>Planlegg fase 2:</strong> AI chatbot og prediktiv analyse (Q2-Q3 2024)</li>
+                        <li><strong>Måle og optimalisere:</strong> Etabler KPI-er og kontinuerlig forbedring</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="alert alert-info">
+                <h4>📋 Presentasjonsgenerator</h4>
+                <p>Når du har fullført alle trinn i AI-revisjonen, genereres automatisk en komplett presentasjon med alle 6 nøkkelslides basert på Liam Ottleys rammeverk. 
+                Presentasjonen er klar for leveranse til klient og kan prises til 10.000 USD per revisjon.</p>
+            </div>
+        </section>
+    </main>
+    
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav buttons
+            const buttons = document.querySelectorAll('.nav-button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+        
+        // Add some interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate progress bars
+            const progressBars = document.querySelectorAll('.progress-fill');
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 500);
+            });
+            
+            // Add click handlers for cards
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Only if clicking the card itself, not buttons inside
+                    if (e.target === this || e.target.tagName === 'H3' || e.target.tagName === 'P') {
+                        this.style.transform = 'scale(1.02)';
+                        setTimeout(() => {
+                            this.style.transform = '';
+                        }, 150);
+                    }
+                });
+            });
+            
+            // Opportunity chip click handlers
+            const chips = document.querySelectorAll('.opportunity-chip');
+            chips.forEach(chip => {
+                chip.addEventListener('click', function() {
+                    alert('AI-mulighet: ' + this.textContent + '\n\nKlikk for å redigere detaljer og ROI-beregninger.');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
