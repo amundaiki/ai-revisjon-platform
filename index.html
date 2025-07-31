@@ -58,7 +58,10 @@
                 
                 <div class="card">
                     <h3>📊 Prosjektstatistikk</h3>
-                    <div id="current-project-name" style="font-weight: bold; margin-bottom: 1rem;">Demo Bedrift AS</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <div id="current-project-name" style="font-weight: bold;">Demo Bedrift AS</div>
+                        <button class="btn btn-warning" onclick="deleteCurrentProject()" title="Slett prosjekt" style="padding: 4px 8px; font-size: 12px;">🗑️ Slett</button>
+                    </div>
                     <div class="grid grid-2" style="gap: 1rem;">
                         <div style="text-align: center;">
                             <div id="interviews-count" style="font-size: 2rem; color: #1976d2; font-weight: bold;">0</div>
@@ -543,8 +546,11 @@
             });
             document.querySelector(`[data-project="${projectId}"]`).classList.add('active');
             
-            // Update dashboard display
+            // Update all sections with project data
             updateDashboard();
+            updateInterviewList();
+            updateProcessDisplay();
+            updateOpportunityMatrix();
         }
         
         function updateDashboard() {
@@ -731,16 +737,66 @@
         
         function updateProcessDisplay() {
             const project = projects[currentProject];
-            if (!project) return;
-            
             const acquisitionContainer = document.getElementById('acquisition-processes');
             const deliveryContainer = document.getElementById('delivery-processes');
             const supportContainer = document.getElementById('support-processes');
             
-            // Clear containers
-            [acquisitionContainer, deliveryContainer, supportContainer].forEach(container => {
-                container.innerHTML = '<div style="text-align: center; padding: 1rem; color: #666; font-style: italic;">Ingen prosesser kartlagt ennå</div>';
-            });
+            if (!project) {
+                [acquisitionContainer, deliveryContainer, supportContainer].forEach(container => {
+                    container.innerHTML = '<div style="text-align: center; padding: 1rem; color: #666; font-style: italic;">Ingen prosjekt valgt</div>';
+                });
+                return;
+            }
+            
+            const processes = project.processes || [];
+            const acquisitionProcesses = processes.filter(p => p.category === 'acquisition');
+            const deliveryProcesses = processes.filter(p => p.category === 'delivery');
+            const supportProcesses = processes.filter(p => p.category === 'support');
+            
+            // Update acquisition processes
+            acquisitionContainer.innerHTML = acquisitionProcesses.length > 0 ? 
+                acquisitionProcesses.map((process, index) => `
+                    <div class="process-step" style="margin: 0.5rem 0; padding: 1rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #2196f3;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong>${process.name}</strong>
+                                <p>${process.description || 'Ingen beskrivelse'}</p>
+                            </div>
+                            <button class="btn btn-warning" onclick="deleteProcess('acquisition', ${acquisitionProcesses.indexOf(process)})" style="padding: 4px 8px; font-size: 12px;">🗑️</button>
+                        </div>
+                    </div>
+                `).join('') : 
+                `<div style="text-align: center; padding: 1rem; color: #666; font-style: italic;">Ingen prosesser kartlagt for ${project.name} ennå</div>`;
+            
+            // Update delivery processes
+            deliveryContainer.innerHTML = deliveryProcesses.length > 0 ? 
+                deliveryProcesses.map((process, index) => `
+                    <div class="process-step" style="margin: 0.5rem 0; padding: 1rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #4caf50;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong>${process.name}</strong>
+                                <p>${process.description || 'Ingen beskrivelse'}</p>
+                            </div>
+                            <button class="btn btn-warning" onclick="deleteProcess('delivery', ${deliveryProcesses.indexOf(process)})" style="padding: 4px 8px; font-size: 12px;">🗑️</button>
+                        </div>
+                    </div>
+                `).join('') : 
+                `<div style="text-align: center; padding: 1rem; color: #666; font-style: italic;">Ingen prosesser kartlagt for ${project.name} ennå</div>`;
+            
+            // Update support processes
+            supportContainer.innerHTML = supportProcesses.length > 0 ? 
+                supportProcesses.map((process, index) => `
+                    <div class="process-step" style="margin: 0.5rem 0; padding: 1rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #ff9800;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong>${process.name}</strong>
+                                <p>${process.description || 'Ingen beskrivelse'}</p>
+                            </div>
+                            <button class="btn btn-warning" onclick="deleteProcess('support', ${supportProcesses.indexOf(process)})" style="padding: 4px 8px; font-size: 12px;">🗑️</button>
+                        </div>
+                    </div>
+                `).join('') : 
+                `<div style="text-align: center; padding: 1rem; color: #666; font-style: italic;">Ingen prosesser kartlagt for ${project.name} ennå</div>`;
             
             // Add processes
             project.processes.forEach(process => {
@@ -774,27 +830,36 @@
         
         function updateInterviewList() {
             const project = projects[currentProject];
-            if (!project) return;
-            
             const container = document.getElementById('completed-interviews');
+            
+            if (!project) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: #666; font-style: italic;">
+                        <p>Ingen prosjekt valgt</p>
+                    </div>
+                `;
+                return;
+            }
             
             if (project.interviews.length === 0) {
                 container.innerHTML = `
                     <div style="text-align: center; padding: 2rem; color: #666; font-style: italic;">
-                        <p>Ingen intervjuer registrert ennå</p>
+                        <p>Ingen intervjuer registrert for ${project.name} ennå</p>
                         <p>Start med å gjennomføre stakeholder og sluttbruker intervjuer</p>
                     </div>
                 `;
                 return;
             }
             
-            container.innerHTML = project.interviews.map(interview => `
+            container.innerHTML = project.interviews.map((interview, index) => `
                 <div class="interview-item" style="background: #f8f9fa; padding: 1rem; margin: 0.5rem 0; border-radius: 8px; border-left: 4px solid ${interview.type === 'stakeholder' ? '#2196f3' : '#4caf50'};">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div>
                             <strong>${interview.name}</strong> - ${interview.role}
                             <br><small>${interview.type === 'stakeholder' ? '👥 Stakeholder' : '👤 Sluttbruker'} • ${new Date(interview.date).toLocaleDateString('no-NO')}</small>
                         </div>
+                        <button class="btn btn-warning" onclick="deleteInterview(${index})" style="padding: 4px 8px; font-size: 12px;">🗑️</button>
+                    </div>
                         <span class="badge ${interview.type === 'stakeholder' ? 'badge-info' : 'badge-success'}">
                             ${interview.answers.filter(a => a.trim()).length} svar
                         </span>
@@ -806,6 +871,79 @@
         // Make functions and variables globally available
         window.currentProject = currentProject;
         window.projects = projects;
+        // Delete functions
+        function deleteCurrentProject() {
+            if (Object.keys(projects).length <= 1) {
+                alert('Du kan ikke slette det siste prosjektet.');
+                return;
+            }
+            
+            if (confirm(`Er du sikker på at du vil slette prosjektet "${projects[currentProject].name}"? Dette kan ikke angres.`)) {
+                delete projects[currentProject];
+                
+                // Switch to first available project
+                currentProject = Object.keys(projects)[0];
+                updateProjectList();
+                updateDashboard();
+                updateInterviewList();
+                updateProcessDisplay();
+                updateOpportunityMatrix();
+            }
+        }
+        
+        function deleteInterview(index) {
+            if (confirm('Er du sikker på at du vil slette dette intervjuet?')) {
+                projects[currentProject].interviews.splice(index, 1);
+                updateInterviewList();
+                updateDashboard();
+            }
+        }
+        
+        function deleteProcess(category, index) {
+            if (confirm('Er du sikker på at du vil slette denne prosessen?')) {
+                const processes = projects[currentProject].processes || [];
+                const categoryProcesses = processes.filter(p => p.category === category);
+                const processToDelete = categoryProcesses[index];
+                const globalIndex = processes.indexOf(processToDelete);
+                
+                if (globalIndex !== -1) {
+                    processes.splice(globalIndex, 1);
+                    updateProcessDisplay();
+                    updateDashboard();
+                }
+            }
+        }
+        
+        function updateOpportunityMatrix() {
+            const project = projects[currentProject];
+            const matrixContainer = document.querySelector('.matrix-container');
+            
+            if (!project || !matrixContainer) return;
+            
+            // Clear existing opportunities in matrix
+            const existingChips = matrixContainer.querySelectorAll('.opportunity-chip');
+            existingChips.forEach(chip => chip.remove());
+            
+            // Add current project's opportunities to matrix
+            (project.opportunities || []).forEach(opportunity => {
+                const chip = document.createElement('div');
+                chip.className = 'opportunity-chip';
+                chip.textContent = opportunity.name;
+                chip.style.left = opportunity.position?.x + '%' || '50%';
+                chip.style.top = opportunity.position?.y + '%' || '50%';
+                chip.style.backgroundColor = getQuadrantColor(opportunity.impact, opportunity.effort);
+                
+                matrixContainer.appendChild(chip);
+            });
+        }
+        
+        function getQuadrantColor(impact, effort) {
+            if (impact >= 7 && effort <= 4) return '#4caf50'; // High impact, low effort - green
+            if (impact >= 7 && effort > 4) return '#ff9800'; // High impact, high effort - orange  
+            if (impact < 7 && effort <= 4) return '#2196f3'; // Low impact, low effort - blue
+            return '#f44336'; // Low impact, high effort - red
+        }
+        
         window.selectProject = selectProject;
         window.updateDashboard = updateDashboard;
         window.openNewProjectPopup = openNewProjectPopup;
@@ -817,13 +955,18 @@
         window.addProcess = addProcess;
         window.updateProcessDisplay = updateProcessDisplay;
         window.updateInterviewList = updateInterviewList;
+        window.deleteCurrentProject = deleteCurrentProject;
+        window.deleteInterview = deleteInterview;
+        window.deleteProcess = deleteProcess;
+        window.updateOpportunityMatrix = updateOpportunityMatrix;
         
         // Initialize application
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize dashboard
+            // Initialize dashboard and all sections  
             updateDashboard();
             updateInterviewList();
             updateProcessDisplay();
+            updateOpportunityMatrix();
             
             // Initialize drag and drop if function exists
             if (window.initializeDragAndDrop) {
